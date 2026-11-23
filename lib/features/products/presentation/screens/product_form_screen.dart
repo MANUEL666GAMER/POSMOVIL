@@ -5,7 +5,7 @@ import '../../../../core/utils/money.dart';
 import '../../../../core/permissions/permission_service.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_text_field.dart';
-import '../../../../shared/widgets/confirm_dialog.dart'; // Si no lo tienes, puedes sustituir por un AlertDialog normal
+//import '../../../../shared/widgets/confirm_dialog.dart'; // Si no lo tienes, puedes sustituir por un AlertDialog normal
 import '../../../../shared/widgets/permission_gate.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../data/products_repository.dart';
