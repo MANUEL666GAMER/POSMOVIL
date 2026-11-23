@@ -20,9 +20,8 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
     if (saved == 'system') state = ThemeMode.system;
   }
 
-  Future<void> toggleTheme() async {
-    final nextMode = state == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
-    state = nextMode;
-    await _settingsRepo.saveSetting('theme_mode', nextMode.name);
+  Future<void> setTheme(ThemeMode mode) async {
+    state = mode;
+    await _settingsRepo.saveSetting('theme_mode', mode.name);
   }
 }

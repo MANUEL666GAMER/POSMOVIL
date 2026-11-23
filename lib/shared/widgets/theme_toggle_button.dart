@@ -14,7 +14,7 @@ class ThemeToggleButton extends ConsumerWidget {
     return IconButton(
       icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
       tooltip: isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro',
-      onPressed: () => ref.read(themeModeProvider.notifier).toggleTheme(),
+      onPressed: () => ref.read(themeModeProvider.notifier).setTheme(isDark ? ThemeMode.light : ThemeMode.dark),
     );
   }
 }
