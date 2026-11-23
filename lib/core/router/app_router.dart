@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
+import '../../features/products/presentation/screens/products_screen.dart';
 
 final goRouter = GoRouter(
   initialLocation: '/',
@@ -19,6 +20,10 @@ final goRouter = GoRouter(
       path: '/login',
       builder: (context, state) => const LoginScreen(),
     ),
-    // TODO: Agregar /home cuando comencemos el catálogo
+    GoRoute(
+      path: '/products',
+      builder: (context, state) => const ProductsScreen(),
+    ),
+    
   ],
 );
