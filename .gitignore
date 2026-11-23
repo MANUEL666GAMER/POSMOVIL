@@ -1,0 +1,159 @@
+# ==========================================
+# .gitignore - POS Fácil (Flutter)
+# ==========================================
+
+# ---------- Flutter / Dart ----------
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+coverage/
+*.log
+flutter_*.png
+.metadata
+.fvm/
+.fvmrc
+
+# En apps (no librerías) pubspec.lock SÍ se sube para que todos usen las mismas versiones.
+# Si prefieres no subirlo, quita el # de la siguiente línea:
+# pubspec.lock
+
+# ---------- Código generado ----------
+# Drift, Riverpod y otros generan archivos con build_runner.
+# Por defecto SE SUBEN (así no necesitas generarlos al clonar).
+# Si prefieres NO subirlos, quita el # de estas líneas y ejecuta
+# "dart run build_runner build" después de clonar:
+# *.g.dart
+# *.freezed.dart
+# *.drift.dart
+
+# ---------- Android ----------
+**/android/**/gradle-wrapper.jar
+**/android/.gradle/
+**/android/captures/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.*
+**/android/app/debug/
+**/android/app/profile/
+**/android/app/release/
+*.iml
+*.ipr
+*.iws
+
+# ---------- iOS / macOS ----------
+**/ios/**/*.mode1v3
+**/ios/**/*.mode2v3
+**/ios/**/*.moved-aside
+**/ios/**/*.pbxuser
+**/ios/**/*.perspectivev3
+**/ios/**/*sync/
+**/ios/**/.sconsign.dblite
+**/ios/**/.tags*
+**/ios/**/.vagrant/
+**/ios/**/DerivedData/
+**/ios/**/Icon?
+**/ios/**/Pods/
+**/ios/**/.symlinks/
+**/ios/**/profile
+**/ios/**/xcuserdata
+**/ios/.generated/
+**/ios/Flutter/.last_build_id
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/ephemeral
+**/ios/Flutter/app.flx
+**/ios/Flutter/app.zip
+**/ios/Flutter/flutter_assets/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.*
+**/macos/Flutter/ephemeral/
+
+# ---------- Web / escritorio (por si se generan) ----------
+**/linux/flutter/ephemeral/
+**/windows/flutter/ephemeral/
+**/web/.dart_tool/
+
+# ---------- 🔐 SECRETOS Y LLAVES (¡NUNCA SUBIR!) ----------
+# Llaves de firma de la app (Android)
+*.jks
+*.keystore
+key.properties
+**/android/key.properties
+
+# Configuración de Google / Firebase (contiene claves del proyecto)
+**/android/app/google-services.json
+**/ios/Runner/GoogleService-Info.plist
+**/macos/Runner/GoogleService-Info.plist
+firebase_options.dart
+
+# Credenciales de Google Drive / OAuth
+client_secret*.json
+credentials.json
+service-account*.json
+**/client_secret_*.apps.googleusercontent.com.json
+
+# Variables de entorno y claves
+.env
+.env.*
+*.pem
+*.p12
+*.p8
+*.mobileprovision
+secrets.dart
+secrets.json
+
+# ---------- 🗄️ Datos locales del negocio (nunca subir) ----------
+# Bases de datos de prueba y respaldos generados al probar la app
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+*.backup
+backups/
+respaldos/
+
+# Archivos generados al probar exportaciones y capturas
+exports/
+exportaciones/
+reportes_generados/
+capturas/
+*.xlsx
+*.xls
+# (si tienes una plantilla de Excel que SÍ quieres subir, agrégala con: git add -f ruta/archivo.xlsx)
+
+# ---------- Editores y herramientas ----------
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.history/
+.vs/
+
+# ---------- Sistema operativo ----------
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# ---------- Documentos temporales ----------
+*.tmp
+*.temp
+*.bak
+~$*
+
+# ---------- Pruebas y análisis ----------
+test/.test_coverage.dart
+.test_coverage.dart
+lcov.info
+.coverage/
