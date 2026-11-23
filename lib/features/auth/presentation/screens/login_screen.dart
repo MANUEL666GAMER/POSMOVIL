@@ -37,7 +37,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (validUser != null) {
       // Iniciar sesión exitosamente
       ref.read(authStateProvider.notifier).state = validUser;
-      context.go('/products');
+      context.go('/home');
+      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Bienvenido, ${validUser.name}')),
       );

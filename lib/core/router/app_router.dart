@@ -4,6 +4,7 @@ import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/products/presentation/screens/products_screen.dart';
+import '../../features/sales/presentation/screens/home_screen.dart';
 
 final goRouter = GoRouter(
   initialLocation: '/',
@@ -23,6 +24,10 @@ final goRouter = GoRouter(
     GoRoute(
       path: '/products',
       builder: (context, state) => const ProductsScreen(),
+    ),
+    GoRoute(
+      path: '/home',
+      builder: (context, state) => const HomeScreen(),
     ),
     
   ],
