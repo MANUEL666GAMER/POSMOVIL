@@ -1,57 +1,49 @@
 import 'package:flutter/material.dart';
+import 'pos_colors.dart';
 
 class AppTheme {
-  // Colores principales de la marca/app
-  static const Color _primaryColor = Color(0xFF2E7D32); // Verde negocio
-  static const Color _secondaryColor = Color(0xFFF57C00); // Naranja para alertas/acciones
-
-  static ThemeData get lightTheme {
+  static ThemeData build(PosColors c, Brightness brightness) {
     return ThemeData(
       useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: _primaryColor,
-        secondary: _secondaryColor,
-        brightness: Brightness.light,
+      brightness: brightness,
+      scaffoldBackgroundColor: c.canvas,
+      colorScheme: ColorScheme(
+        brightness: brightness,
+        primary: c.brand,
+        onPrimary: c.onBrand,
+        secondary: c.accent,
+        onSecondary: c.onAccent,
+        error: c.danger,
+        onError: c.onDanger,
+        surface: c.card,
+        onSurface: c.ink,
       ),
-      appBarTheme: const AppBarTheme(
-        centerTitle: true,
+      appBarTheme: AppBarTheme(
+        backgroundColor: c.card,
+        foregroundColor: c.ink,
         elevation: 0,
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        filled: true,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          minimumSize: const Size.fromHeight(56),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        surfaceTintColor: Colors.transparent,
+        titleTextStyle: TextStyle(
+          color: c.ink,
+          fontSize: 22,
+          fontWeight: FontWeight.w900,
         ),
       ),
+      dividerTheme: DividerThemeData(color: c.line, thickness: 1),
+      cardTheme: CardThemeData(
+        color: c.card,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: brightness == Brightness.dark
+              ? BorderSide(color: c.line, width: 1)
+              : BorderSide.none,
+        ),
+      ),
+      extensions: [c],
     );
   }
 
-  static ThemeData get darkTheme {
-    return ThemeData(
-      useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: _primaryColor,
-        secondary: _secondaryColor,
-        brightness: Brightness.dark,
-      ),
-      appBarTheme: const AppBarTheme(
-        centerTitle: true,
-        elevation: 0,
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        filled: true,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          minimumSize: const Size.fromHeight(56),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-      ),
-    );
-  }
+  static ThemeData get lightTheme => build(PosColors.light, Brightness.light);
+  static ThemeData get darkTheme => build(PosColors.dark, Brightness.dark);
 }

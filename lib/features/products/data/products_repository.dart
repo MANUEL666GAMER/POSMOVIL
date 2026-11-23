@@ -12,63 +12,104 @@ class ProductsRepository {
   final AppDatabase _db;
   ProductsRepository(this._db);
 
-  Future<List<Product>> getProducts({String query = ''}) async {
-    final select = _db.select(_db.products)
-      ..where((p) => p.deletedAt.isNull()); // Regla: Solo productos activos
+  Future<List<Product>> getAllProducts({String? query}) async {
+    final stmt = _db.select(_db.products)
+      ..where((p) => p.deletedAt.isNull())
+      ..orderBy([(p) => OrderingTerm(expression: p.name)]);
 
-    if (query.isNotEmpty) {
-      final searchTerm = '%$query%';
-      select.where((p) => 
-        p.name.like(searchTerm) | 
-        (p.barcode.like(searchTerm))
-      );
-    }
-    
-    return await select.get();
+    final results = await stmt.get();
+    if (query == null || query.trim().isEmpty) return results;
+
+    final q = query.trim().toLowerCase();
+    return results.where((p) {
+      final matchName = p.name.toLowerCase().contains(q);
+      final matchCode = p.barcode?.toLowerCase().contains(q) ?? false;
+      return matchName || matchCode;
+    }).toList();
   }
 
-  Future<void> saveProduct({
-    String? id, // Si es nulo, es uno nuevo
+  Future<void> createProduct({
     required String name,
-    required String? barcode,
     required String saleType,
     required int priceCents,
+    int? costCents,
+    String? categoryId,
+    String? barcode,
+    required int minStock,
+    int initialStock = 0,
+    required String userId,
   }) async {
-    final now = DateTime.now();
-    
-    if (id == null) {
-      // Crear
+    await _db.transaction(() async {
+      final now = DateTime.now();
+      final productId = const Uuid().v4();
+
       await _db.into(_db.products).insert(
-        ProductsCompanion.insert(
-          id: const Uuid().v4(),
-          name: name,
-          barcode: Value(barcode),
-          saleType: saleType,
-          priceCents: priceCents,
-          createdAt: now,
-          updatedAt: now,
-        )
-      );
-    } else {
-      // Editar
-      await (_db.update(_db.products)..where((p) => p.id.equals(id))).write(
-        ProductsCompanion(
-          name: Value(name),
-          barcode: Value(barcode),
-          saleType: Value(saleType),
-          priceCents: Value(priceCents),
-          updatedAt: Value(now),
-        )
-      );
-    }
+            ProductsCompanion.insert(
+              id: productId,
+              name: name,
+              saleType: saleType,
+              priceCents: priceCents,
+              costCents: Value(costCents),
+              categoryId: Value(categoryId),
+              barcode: Value(barcode),
+              minStock: Value(minStock),
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+
+      if (initialStock > 0) {
+        await _db.into(_db.stockMovements).insert(
+              StockMovementsCompanion.insert(
+                id: const Uuid().v4(),
+                productId: productId,
+                type: 'purchase',
+                quantity: initialStock,
+                reason: const Value('Existencia inicial'),
+                userId: userId,
+                createdAt: now,
+                updatedAt: now,
+              ),
+            );
+      }
+    });
+  }
+
+  Future<void> updateProduct({
+    required String id,
+    required String name,
+    required String saleType,
+    required int priceCents,
+    int? costCents,
+    String? categoryId,
+    String? barcode,
+    required int minStock,
+  }) async {
+    await (_db.update(_db.products)..where((p) => p.id.equals(id))).write(
+      ProductsCompanion(
+        name: Value(name),
+        saleType: Value(saleType),
+        priceCents: Value(priceCents),
+        costCents: Value(costCents),
+        categoryId: Value(categoryId),
+        barcode: Value(barcode),
+        minStock: Value(minStock),
+        updatedAt: Value(DateTime.now()),
+      ),
+    );
   }
 
   Future<void> deleteProduct(String id) async {
-    // Regla de negocio: Borrado lógico
     await (_db.update(_db.products)..where((p) => p.id.equals(id))).write(
       ProductsCompanion(
         deletedAt: Value(DateTime.now()),
-      )
+        updatedAt: Value(DateTime.now()),
+      ),
     );
   }
+  Future<List<Product>> getProducts({String? query}) {
+    return getAllProducts(query: query);
+  }
+
 }
+

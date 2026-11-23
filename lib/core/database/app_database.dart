@@ -113,15 +113,34 @@ class CashCloses extends Table {
   TextColumn get userId => text().references(Users, #id)();
   DateTimeColumn get openedAt => dateTime()();
   DateTimeColumn get closedAt => dateTime().nullable()();
+  TextColumn get closedBy => text().nullable()();
   IntColumn get openingFloatCents => integer()();
+  IntColumn get cashSalesCents => integer().withDefault(const Constant(0))();
+  IntColumn get cardSalesCents => integer().withDefault(const Constant(0))();
+  IntColumn get transferSalesCents => integer().withDefault(const Constant(0))();
+  IntColumn get salesCount => integer().withDefault(const Constant(0))();
   IntColumn get expectedCashCents => integer().nullable()();
   IntColumn get countedCashCents => integer().nullable()();
   IntColumn get differenceCents => integer().nullable()();
-  TextColumn get totalsByMethod => text().nullable()(); // JSON con totales por método
+  TextColumn get totalsByMethod => text().nullable()(); // Compatibilidad
+  TextColumn get denominationsJson => text().nullable()();
   
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
   DateTimeColumn get deletedAt => dateTime().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+class CashFloatChanges extends Table {
+  TextColumn get id => text()();
+  TextColumn get cashCloseId => text().references(CashCloses, #id)();
+  DateTimeColumn get changedAt => dateTime()();
+  IntColumn get fromCents => integer()();
+  IntColumn get toCents => integer()();
+  TextColumn get reason => text()();
+  TextColumn get userId => text().references(Users, #id)();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -156,13 +175,14 @@ LazyDatabase _openConnection() {
   Sales,
   SaleItems,
   CashCloses,
+  CashFloatChanges,
   Settings,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration {
@@ -171,7 +191,15 @@ class AppDatabase extends _$AppDatabase {
         await m.createAll();
       },
       onUpgrade: (Migrator m, int from, int to) async {
-        // Manejo de futuras migraciones
+        if (from < 2) {
+          await m.addColumn(cashCloses, cashCloses.closedBy);
+          await m.addColumn(cashCloses, cashCloses.cashSalesCents);
+          await m.addColumn(cashCloses, cashCloses.cardSalesCents);
+          await m.addColumn(cashCloses, cashCloses.transferSalesCents);
+          await m.addColumn(cashCloses, cashCloses.salesCount);
+          await m.addColumn(cashCloses, cashCloses.denominationsJson);
+          await m.createTable(cashFloatChanges);
+        }
       },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');

@@ -25,13 +25,12 @@ dependencies:
   crypto: ^3.0.3
   
   # Hardware y exportación (comentados hasta implementarse en siguientes fases para evitar errores de compilación prematuros)
-  mobile_scanner: ^3.5.2
+  mobile_scanner: ^7.5.0
   flutter_secure_storage: ^9.0.0
   excel: ^4.0.6
   share_plus: ^7.2.1
   google_sign_in: ^6.1.6
   googleapis: ^11.0.1
-  workmanager: ^0.5.2
   gal: ^2.1.2
 
 dev_dependencies:

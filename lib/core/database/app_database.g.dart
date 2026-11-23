@@ -1412,12 +1412,50 @@ class $CashClosesTable extends CashCloses
   late final GeneratedColumn<DateTime> closedAt = GeneratedColumn<DateTime>(
       'closed_at', aliasedName, true,
       type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _closedByMeta =
+      const VerificationMeta('closedBy');
+  @override
+  late final GeneratedColumn<String> closedBy = GeneratedColumn<String>(
+      'closed_by', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _openingFloatCentsMeta =
       const VerificationMeta('openingFloatCents');
   @override
   late final GeneratedColumn<int> openingFloatCents = GeneratedColumn<int>(
       'opening_float_cents', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _cashSalesCentsMeta =
+      const VerificationMeta('cashSalesCents');
+  @override
+  late final GeneratedColumn<int> cashSalesCents = GeneratedColumn<int>(
+      'cash_sales_cents', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _cardSalesCentsMeta =
+      const VerificationMeta('cardSalesCents');
+  @override
+  late final GeneratedColumn<int> cardSalesCents = GeneratedColumn<int>(
+      'card_sales_cents', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _transferSalesCentsMeta =
+      const VerificationMeta('transferSalesCents');
+  @override
+  late final GeneratedColumn<int> transferSalesCents = GeneratedColumn<int>(
+      'transfer_sales_cents', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _salesCountMeta =
+      const VerificationMeta('salesCount');
+  @override
+  late final GeneratedColumn<int> salesCount = GeneratedColumn<int>(
+      'sales_count', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
   static const VerificationMeta _expectedCashCentsMeta =
       const VerificationMeta('expectedCashCents');
   @override
@@ -1442,6 +1480,12 @@ class $CashClosesTable extends CashCloses
   late final GeneratedColumn<String> totalsByMethod = GeneratedColumn<String>(
       'totals_by_method', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _denominationsJsonMeta =
+      const VerificationMeta('denominationsJson');
+  @override
+  late final GeneratedColumn<String> denominationsJson =
+      GeneratedColumn<String>('denominations_json', aliasedName, true,
+          type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
@@ -1466,11 +1510,17 @@ class $CashClosesTable extends CashCloses
         userId,
         openedAt,
         closedAt,
+        closedBy,
         openingFloatCents,
+        cashSalesCents,
+        cardSalesCents,
+        transferSalesCents,
+        salesCount,
         expectedCashCents,
         countedCashCents,
         differenceCents,
         totalsByMethod,
+        denominationsJson,
         createdAt,
         updatedAt,
         deletedAt
@@ -1506,6 +1556,10 @@ class $CashClosesTable extends CashCloses
       context.handle(_closedAtMeta,
           closedAt.isAcceptableOrUnknown(data['closed_at']!, _closedAtMeta));
     }
+    if (data.containsKey('closed_by')) {
+      context.handle(_closedByMeta,
+          closedBy.isAcceptableOrUnknown(data['closed_by']!, _closedByMeta));
+    }
     if (data.containsKey('opening_float_cents')) {
       context.handle(
           _openingFloatCentsMeta,
@@ -1513,6 +1567,30 @@ class $CashClosesTable extends CashCloses
               data['opening_float_cents']!, _openingFloatCentsMeta));
     } else if (isInserting) {
       context.missing(_openingFloatCentsMeta);
+    }
+    if (data.containsKey('cash_sales_cents')) {
+      context.handle(
+          _cashSalesCentsMeta,
+          cashSalesCents.isAcceptableOrUnknown(
+              data['cash_sales_cents']!, _cashSalesCentsMeta));
+    }
+    if (data.containsKey('card_sales_cents')) {
+      context.handle(
+          _cardSalesCentsMeta,
+          cardSalesCents.isAcceptableOrUnknown(
+              data['card_sales_cents']!, _cardSalesCentsMeta));
+    }
+    if (data.containsKey('transfer_sales_cents')) {
+      context.handle(
+          _transferSalesCentsMeta,
+          transferSalesCents.isAcceptableOrUnknown(
+              data['transfer_sales_cents']!, _transferSalesCentsMeta));
+    }
+    if (data.containsKey('sales_count')) {
+      context.handle(
+          _salesCountMeta,
+          salesCount.isAcceptableOrUnknown(
+              data['sales_count']!, _salesCountMeta));
     }
     if (data.containsKey('expected_cash_cents')) {
       context.handle(
@@ -1537,6 +1615,12 @@ class $CashClosesTable extends CashCloses
           _totalsByMethodMeta,
           totalsByMethod.isAcceptableOrUnknown(
               data['totals_by_method']!, _totalsByMethodMeta));
+    }
+    if (data.containsKey('denominations_json')) {
+      context.handle(
+          _denominationsJsonMeta,
+          denominationsJson.isAcceptableOrUnknown(
+              data['denominations_json']!, _denominationsJsonMeta));
     }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
@@ -1571,8 +1655,18 @@ class $CashClosesTable extends CashCloses
           .read(DriftSqlType.dateTime, data['${effectivePrefix}opened_at'])!,
       closedAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}closed_at']),
+      closedBy: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}closed_by']),
       openingFloatCents: attachedDatabase.typeMapping.read(
           DriftSqlType.int, data['${effectivePrefix}opening_float_cents'])!,
+      cashSalesCents: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}cash_sales_cents'])!,
+      cardSalesCents: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}card_sales_cents'])!,
+      transferSalesCents: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}transfer_sales_cents'])!,
+      salesCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}sales_count'])!,
       expectedCashCents: attachedDatabase.typeMapping.read(
           DriftSqlType.int, data['${effectivePrefix}expected_cash_cents']),
       countedCashCents: attachedDatabase.typeMapping
@@ -1581,6 +1675,8 @@ class $CashClosesTable extends CashCloses
           .read(DriftSqlType.int, data['${effectivePrefix}difference_cents']),
       totalsByMethod: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}totals_by_method']),
+      denominationsJson: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}denominations_json']),
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
       updatedAt: attachedDatabase.typeMapping
@@ -1601,11 +1697,17 @@ class CashClose extends DataClass implements Insertable<CashClose> {
   final String userId;
   final DateTime openedAt;
   final DateTime? closedAt;
+  final String? closedBy;
   final int openingFloatCents;
+  final int cashSalesCents;
+  final int cardSalesCents;
+  final int transferSalesCents;
+  final int salesCount;
   final int? expectedCashCents;
   final int? countedCashCents;
   final int? differenceCents;
   final String? totalsByMethod;
+  final String? denominationsJson;
   final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime? deletedAt;
@@ -1614,11 +1716,17 @@ class CashClose extends DataClass implements Insertable<CashClose> {
       required this.userId,
       required this.openedAt,
       this.closedAt,
+      this.closedBy,
       required this.openingFloatCents,
+      required this.cashSalesCents,
+      required this.cardSalesCents,
+      required this.transferSalesCents,
+      required this.salesCount,
       this.expectedCashCents,
       this.countedCashCents,
       this.differenceCents,
       this.totalsByMethod,
+      this.denominationsJson,
       required this.createdAt,
       required this.updatedAt,
       this.deletedAt});
@@ -1631,7 +1739,14 @@ class CashClose extends DataClass implements Insertable<CashClose> {
     if (!nullToAbsent || closedAt != null) {
       map['closed_at'] = Variable<DateTime>(closedAt);
     }
+    if (!nullToAbsent || closedBy != null) {
+      map['closed_by'] = Variable<String>(closedBy);
+    }
     map['opening_float_cents'] = Variable<int>(openingFloatCents);
+    map['cash_sales_cents'] = Variable<int>(cashSalesCents);
+    map['card_sales_cents'] = Variable<int>(cardSalesCents);
+    map['transfer_sales_cents'] = Variable<int>(transferSalesCents);
+    map['sales_count'] = Variable<int>(salesCount);
     if (!nullToAbsent || expectedCashCents != null) {
       map['expected_cash_cents'] = Variable<int>(expectedCashCents);
     }
@@ -1643,6 +1758,9 @@ class CashClose extends DataClass implements Insertable<CashClose> {
     }
     if (!nullToAbsent || totalsByMethod != null) {
       map['totals_by_method'] = Variable<String>(totalsByMethod);
+    }
+    if (!nullToAbsent || denominationsJson != null) {
+      map['denominations_json'] = Variable<String>(denominationsJson);
     }
     map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
@@ -1660,7 +1778,14 @@ class CashClose extends DataClass implements Insertable<CashClose> {
       closedAt: closedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(closedAt),
+      closedBy: closedBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(closedBy),
       openingFloatCents: Value(openingFloatCents),
+      cashSalesCents: Value(cashSalesCents),
+      cardSalesCents: Value(cardSalesCents),
+      transferSalesCents: Value(transferSalesCents),
+      salesCount: Value(salesCount),
       expectedCashCents: expectedCashCents == null && nullToAbsent
           ? const Value.absent()
           : Value(expectedCashCents),
@@ -1673,6 +1798,9 @@ class CashClose extends DataClass implements Insertable<CashClose> {
       totalsByMethod: totalsByMethod == null && nullToAbsent
           ? const Value.absent()
           : Value(totalsByMethod),
+      denominationsJson: denominationsJson == null && nullToAbsent
+          ? const Value.absent()
+          : Value(denominationsJson),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
       deletedAt: deletedAt == null && nullToAbsent
@@ -1689,11 +1817,18 @@ class CashClose extends DataClass implements Insertable<CashClose> {
       userId: serializer.fromJson<String>(json['userId']),
       openedAt: serializer.fromJson<DateTime>(json['openedAt']),
       closedAt: serializer.fromJson<DateTime?>(json['closedAt']),
+      closedBy: serializer.fromJson<String?>(json['closedBy']),
       openingFloatCents: serializer.fromJson<int>(json['openingFloatCents']),
+      cashSalesCents: serializer.fromJson<int>(json['cashSalesCents']),
+      cardSalesCents: serializer.fromJson<int>(json['cardSalesCents']),
+      transferSalesCents: serializer.fromJson<int>(json['transferSalesCents']),
+      salesCount: serializer.fromJson<int>(json['salesCount']),
       expectedCashCents: serializer.fromJson<int?>(json['expectedCashCents']),
       countedCashCents: serializer.fromJson<int?>(json['countedCashCents']),
       differenceCents: serializer.fromJson<int?>(json['differenceCents']),
       totalsByMethod: serializer.fromJson<String?>(json['totalsByMethod']),
+      denominationsJson:
+          serializer.fromJson<String?>(json['denominationsJson']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
@@ -1707,11 +1842,17 @@ class CashClose extends DataClass implements Insertable<CashClose> {
       'userId': serializer.toJson<String>(userId),
       'openedAt': serializer.toJson<DateTime>(openedAt),
       'closedAt': serializer.toJson<DateTime?>(closedAt),
+      'closedBy': serializer.toJson<String?>(closedBy),
       'openingFloatCents': serializer.toJson<int>(openingFloatCents),
+      'cashSalesCents': serializer.toJson<int>(cashSalesCents),
+      'cardSalesCents': serializer.toJson<int>(cardSalesCents),
+      'transferSalesCents': serializer.toJson<int>(transferSalesCents),
+      'salesCount': serializer.toJson<int>(salesCount),
       'expectedCashCents': serializer.toJson<int?>(expectedCashCents),
       'countedCashCents': serializer.toJson<int?>(countedCashCents),
       'differenceCents': serializer.toJson<int?>(differenceCents),
       'totalsByMethod': serializer.toJson<String?>(totalsByMethod),
+      'denominationsJson': serializer.toJson<String?>(denominationsJson),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
       'deletedAt': serializer.toJson<DateTime?>(deletedAt),
@@ -1723,11 +1864,17 @@ class CashClose extends DataClass implements Insertable<CashClose> {
           String? userId,
           DateTime? openedAt,
           Value<DateTime?> closedAt = const Value.absent(),
+          Value<String?> closedBy = const Value.absent(),
           int? openingFloatCents,
+          int? cashSalesCents,
+          int? cardSalesCents,
+          int? transferSalesCents,
+          int? salesCount,
           Value<int?> expectedCashCents = const Value.absent(),
           Value<int?> countedCashCents = const Value.absent(),
           Value<int?> differenceCents = const Value.absent(),
           Value<String?> totalsByMethod = const Value.absent(),
+          Value<String?> denominationsJson = const Value.absent(),
           DateTime? createdAt,
           DateTime? updatedAt,
           Value<DateTime?> deletedAt = const Value.absent()}) =>
@@ -1736,7 +1883,12 @@ class CashClose extends DataClass implements Insertable<CashClose> {
         userId: userId ?? this.userId,
         openedAt: openedAt ?? this.openedAt,
         closedAt: closedAt.present ? closedAt.value : this.closedAt,
+        closedBy: closedBy.present ? closedBy.value : this.closedBy,
         openingFloatCents: openingFloatCents ?? this.openingFloatCents,
+        cashSalesCents: cashSalesCents ?? this.cashSalesCents,
+        cardSalesCents: cardSalesCents ?? this.cardSalesCents,
+        transferSalesCents: transferSalesCents ?? this.transferSalesCents,
+        salesCount: salesCount ?? this.salesCount,
         expectedCashCents: expectedCashCents.present
             ? expectedCashCents.value
             : this.expectedCashCents,
@@ -1748,6 +1900,9 @@ class CashClose extends DataClass implements Insertable<CashClose> {
             : this.differenceCents,
         totalsByMethod:
             totalsByMethod.present ? totalsByMethod.value : this.totalsByMethod,
+        denominationsJson: denominationsJson.present
+            ? denominationsJson.value
+            : this.denominationsJson,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
         deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
@@ -1758,9 +1913,21 @@ class CashClose extends DataClass implements Insertable<CashClose> {
       userId: data.userId.present ? data.userId.value : this.userId,
       openedAt: data.openedAt.present ? data.openedAt.value : this.openedAt,
       closedAt: data.closedAt.present ? data.closedAt.value : this.closedAt,
+      closedBy: data.closedBy.present ? data.closedBy.value : this.closedBy,
       openingFloatCents: data.openingFloatCents.present
           ? data.openingFloatCents.value
           : this.openingFloatCents,
+      cashSalesCents: data.cashSalesCents.present
+          ? data.cashSalesCents.value
+          : this.cashSalesCents,
+      cardSalesCents: data.cardSalesCents.present
+          ? data.cardSalesCents.value
+          : this.cardSalesCents,
+      transferSalesCents: data.transferSalesCents.present
+          ? data.transferSalesCents.value
+          : this.transferSalesCents,
+      salesCount:
+          data.salesCount.present ? data.salesCount.value : this.salesCount,
       expectedCashCents: data.expectedCashCents.present
           ? data.expectedCashCents.value
           : this.expectedCashCents,
@@ -1773,6 +1940,9 @@ class CashClose extends DataClass implements Insertable<CashClose> {
       totalsByMethod: data.totalsByMethod.present
           ? data.totalsByMethod.value
           : this.totalsByMethod,
+      denominationsJson: data.denominationsJson.present
+          ? data.denominationsJson.value
+          : this.denominationsJson,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
@@ -1786,11 +1956,17 @@ class CashClose extends DataClass implements Insertable<CashClose> {
           ..write('userId: $userId, ')
           ..write('openedAt: $openedAt, ')
           ..write('closedAt: $closedAt, ')
+          ..write('closedBy: $closedBy, ')
           ..write('openingFloatCents: $openingFloatCents, ')
+          ..write('cashSalesCents: $cashSalesCents, ')
+          ..write('cardSalesCents: $cardSalesCents, ')
+          ..write('transferSalesCents: $transferSalesCents, ')
+          ..write('salesCount: $salesCount, ')
           ..write('expectedCashCents: $expectedCashCents, ')
           ..write('countedCashCents: $countedCashCents, ')
           ..write('differenceCents: $differenceCents, ')
           ..write('totalsByMethod: $totalsByMethod, ')
+          ..write('denominationsJson: $denominationsJson, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt')
@@ -1804,11 +1980,17 @@ class CashClose extends DataClass implements Insertable<CashClose> {
       userId,
       openedAt,
       closedAt,
+      closedBy,
       openingFloatCents,
+      cashSalesCents,
+      cardSalesCents,
+      transferSalesCents,
+      salesCount,
       expectedCashCents,
       countedCashCents,
       differenceCents,
       totalsByMethod,
+      denominationsJson,
       createdAt,
       updatedAt,
       deletedAt);
@@ -1820,11 +2002,17 @@ class CashClose extends DataClass implements Insertable<CashClose> {
           other.userId == this.userId &&
           other.openedAt == this.openedAt &&
           other.closedAt == this.closedAt &&
+          other.closedBy == this.closedBy &&
           other.openingFloatCents == this.openingFloatCents &&
+          other.cashSalesCents == this.cashSalesCents &&
+          other.cardSalesCents == this.cardSalesCents &&
+          other.transferSalesCents == this.transferSalesCents &&
+          other.salesCount == this.salesCount &&
           other.expectedCashCents == this.expectedCashCents &&
           other.countedCashCents == this.countedCashCents &&
           other.differenceCents == this.differenceCents &&
           other.totalsByMethod == this.totalsByMethod &&
+          other.denominationsJson == this.denominationsJson &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
           other.deletedAt == this.deletedAt);
@@ -1835,11 +2023,17 @@ class CashClosesCompanion extends UpdateCompanion<CashClose> {
   final Value<String> userId;
   final Value<DateTime> openedAt;
   final Value<DateTime?> closedAt;
+  final Value<String?> closedBy;
   final Value<int> openingFloatCents;
+  final Value<int> cashSalesCents;
+  final Value<int> cardSalesCents;
+  final Value<int> transferSalesCents;
+  final Value<int> salesCount;
   final Value<int?> expectedCashCents;
   final Value<int?> countedCashCents;
   final Value<int?> differenceCents;
   final Value<String?> totalsByMethod;
+  final Value<String?> denominationsJson;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<DateTime?> deletedAt;
@@ -1849,11 +2043,17 @@ class CashClosesCompanion extends UpdateCompanion<CashClose> {
     this.userId = const Value.absent(),
     this.openedAt = const Value.absent(),
     this.closedAt = const Value.absent(),
+    this.closedBy = const Value.absent(),
     this.openingFloatCents = const Value.absent(),
+    this.cashSalesCents = const Value.absent(),
+    this.cardSalesCents = const Value.absent(),
+    this.transferSalesCents = const Value.absent(),
+    this.salesCount = const Value.absent(),
     this.expectedCashCents = const Value.absent(),
     this.countedCashCents = const Value.absent(),
     this.differenceCents = const Value.absent(),
     this.totalsByMethod = const Value.absent(),
+    this.denominationsJson = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.deletedAt = const Value.absent(),
@@ -1864,11 +2064,17 @@ class CashClosesCompanion extends UpdateCompanion<CashClose> {
     required String userId,
     required DateTime openedAt,
     this.closedAt = const Value.absent(),
+    this.closedBy = const Value.absent(),
     required int openingFloatCents,
+    this.cashSalesCents = const Value.absent(),
+    this.cardSalesCents = const Value.absent(),
+    this.transferSalesCents = const Value.absent(),
+    this.salesCount = const Value.absent(),
     this.expectedCashCents = const Value.absent(),
     this.countedCashCents = const Value.absent(),
     this.differenceCents = const Value.absent(),
     this.totalsByMethod = const Value.absent(),
+    this.denominationsJson = const Value.absent(),
     required DateTime createdAt,
     required DateTime updatedAt,
     this.deletedAt = const Value.absent(),
@@ -1884,11 +2090,17 @@ class CashClosesCompanion extends UpdateCompanion<CashClose> {
     Expression<String>? userId,
     Expression<DateTime>? openedAt,
     Expression<DateTime>? closedAt,
+    Expression<String>? closedBy,
     Expression<int>? openingFloatCents,
+    Expression<int>? cashSalesCents,
+    Expression<int>? cardSalesCents,
+    Expression<int>? transferSalesCents,
+    Expression<int>? salesCount,
     Expression<int>? expectedCashCents,
     Expression<int>? countedCashCents,
     Expression<int>? differenceCents,
     Expression<String>? totalsByMethod,
+    Expression<String>? denominationsJson,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
     Expression<DateTime>? deletedAt,
@@ -1899,11 +2111,18 @@ class CashClosesCompanion extends UpdateCompanion<CashClose> {
       if (userId != null) 'user_id': userId,
       if (openedAt != null) 'opened_at': openedAt,
       if (closedAt != null) 'closed_at': closedAt,
+      if (closedBy != null) 'closed_by': closedBy,
       if (openingFloatCents != null) 'opening_float_cents': openingFloatCents,
+      if (cashSalesCents != null) 'cash_sales_cents': cashSalesCents,
+      if (cardSalesCents != null) 'card_sales_cents': cardSalesCents,
+      if (transferSalesCents != null)
+        'transfer_sales_cents': transferSalesCents,
+      if (salesCount != null) 'sales_count': salesCount,
       if (expectedCashCents != null) 'expected_cash_cents': expectedCashCents,
       if (countedCashCents != null) 'counted_cash_cents': countedCashCents,
       if (differenceCents != null) 'difference_cents': differenceCents,
       if (totalsByMethod != null) 'totals_by_method': totalsByMethod,
+      if (denominationsJson != null) 'denominations_json': denominationsJson,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (deletedAt != null) 'deleted_at': deletedAt,
@@ -1916,11 +2135,17 @@ class CashClosesCompanion extends UpdateCompanion<CashClose> {
       Value<String>? userId,
       Value<DateTime>? openedAt,
       Value<DateTime?>? closedAt,
+      Value<String?>? closedBy,
       Value<int>? openingFloatCents,
+      Value<int>? cashSalesCents,
+      Value<int>? cardSalesCents,
+      Value<int>? transferSalesCents,
+      Value<int>? salesCount,
       Value<int?>? expectedCashCents,
       Value<int?>? countedCashCents,
       Value<int?>? differenceCents,
       Value<String?>? totalsByMethod,
+      Value<String?>? denominationsJson,
       Value<DateTime>? createdAt,
       Value<DateTime>? updatedAt,
       Value<DateTime?>? deletedAt,
@@ -1930,11 +2155,17 @@ class CashClosesCompanion extends UpdateCompanion<CashClose> {
       userId: userId ?? this.userId,
       openedAt: openedAt ?? this.openedAt,
       closedAt: closedAt ?? this.closedAt,
+      closedBy: closedBy ?? this.closedBy,
       openingFloatCents: openingFloatCents ?? this.openingFloatCents,
+      cashSalesCents: cashSalesCents ?? this.cashSalesCents,
+      cardSalesCents: cardSalesCents ?? this.cardSalesCents,
+      transferSalesCents: transferSalesCents ?? this.transferSalesCents,
+      salesCount: salesCount ?? this.salesCount,
       expectedCashCents: expectedCashCents ?? this.expectedCashCents,
       countedCashCents: countedCashCents ?? this.countedCashCents,
       differenceCents: differenceCents ?? this.differenceCents,
       totalsByMethod: totalsByMethod ?? this.totalsByMethod,
+      denominationsJson: denominationsJson ?? this.denominationsJson,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       deletedAt: deletedAt ?? this.deletedAt,
@@ -1957,8 +2188,23 @@ class CashClosesCompanion extends UpdateCompanion<CashClose> {
     if (closedAt.present) {
       map['closed_at'] = Variable<DateTime>(closedAt.value);
     }
+    if (closedBy.present) {
+      map['closed_by'] = Variable<String>(closedBy.value);
+    }
     if (openingFloatCents.present) {
       map['opening_float_cents'] = Variable<int>(openingFloatCents.value);
+    }
+    if (cashSalesCents.present) {
+      map['cash_sales_cents'] = Variable<int>(cashSalesCents.value);
+    }
+    if (cardSalesCents.present) {
+      map['card_sales_cents'] = Variable<int>(cardSalesCents.value);
+    }
+    if (transferSalesCents.present) {
+      map['transfer_sales_cents'] = Variable<int>(transferSalesCents.value);
+    }
+    if (salesCount.present) {
+      map['sales_count'] = Variable<int>(salesCount.value);
     }
     if (expectedCashCents.present) {
       map['expected_cash_cents'] = Variable<int>(expectedCashCents.value);
@@ -1971,6 +2217,9 @@ class CashClosesCompanion extends UpdateCompanion<CashClose> {
     }
     if (totalsByMethod.present) {
       map['totals_by_method'] = Variable<String>(totalsByMethod.value);
+    }
+    if (denominationsJson.present) {
+      map['denominations_json'] = Variable<String>(denominationsJson.value);
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
@@ -1994,11 +2243,17 @@ class CashClosesCompanion extends UpdateCompanion<CashClose> {
           ..write('userId: $userId, ')
           ..write('openedAt: $openedAt, ')
           ..write('closedAt: $closedAt, ')
+          ..write('closedBy: $closedBy, ')
           ..write('openingFloatCents: $openingFloatCents, ')
+          ..write('cashSalesCents: $cashSalesCents, ')
+          ..write('cardSalesCents: $cardSalesCents, ')
+          ..write('transferSalesCents: $transferSalesCents, ')
+          ..write('salesCount: $salesCount, ')
           ..write('expectedCashCents: $expectedCashCents, ')
           ..write('countedCashCents: $countedCashCents, ')
           ..write('differenceCents: $differenceCents, ')
           ..write('totalsByMethod: $totalsByMethod, ')
+          ..write('denominationsJson: $denominationsJson, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt, ')
@@ -3656,6 +3911,397 @@ class SaleItemsCompanion extends UpdateCompanion<SaleItem> {
   }
 }
 
+class $CashFloatChangesTable extends CashFloatChanges
+    with TableInfo<$CashFloatChangesTable, CashFloatChange> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CashFloatChangesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _cashCloseIdMeta =
+      const VerificationMeta('cashCloseId');
+  @override
+  late final GeneratedColumn<String> cashCloseId = GeneratedColumn<String>(
+      'cash_close_id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES cash_closes (id)'));
+  static const VerificationMeta _changedAtMeta =
+      const VerificationMeta('changedAt');
+  @override
+  late final GeneratedColumn<DateTime> changedAt = GeneratedColumn<DateTime>(
+      'changed_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _fromCentsMeta =
+      const VerificationMeta('fromCents');
+  @override
+  late final GeneratedColumn<int> fromCents = GeneratedColumn<int>(
+      'from_cents', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _toCentsMeta =
+      const VerificationMeta('toCents');
+  @override
+  late final GeneratedColumn<int> toCents = GeneratedColumn<int>(
+      'to_cents', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _reasonMeta = const VerificationMeta('reason');
+  @override
+  late final GeneratedColumn<String> reason = GeneratedColumn<String>(
+      'reason', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES users (id)'));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, cashCloseId, changedAt, fromCents, toCents, reason, userId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'cash_float_changes';
+  @override
+  VerificationContext validateIntegrity(Insertable<CashFloatChange> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('cash_close_id')) {
+      context.handle(
+          _cashCloseIdMeta,
+          cashCloseId.isAcceptableOrUnknown(
+              data['cash_close_id']!, _cashCloseIdMeta));
+    } else if (isInserting) {
+      context.missing(_cashCloseIdMeta);
+    }
+    if (data.containsKey('changed_at')) {
+      context.handle(_changedAtMeta,
+          changedAt.isAcceptableOrUnknown(data['changed_at']!, _changedAtMeta));
+    } else if (isInserting) {
+      context.missing(_changedAtMeta);
+    }
+    if (data.containsKey('from_cents')) {
+      context.handle(_fromCentsMeta,
+          fromCents.isAcceptableOrUnknown(data['from_cents']!, _fromCentsMeta));
+    } else if (isInserting) {
+      context.missing(_fromCentsMeta);
+    }
+    if (data.containsKey('to_cents')) {
+      context.handle(_toCentsMeta,
+          toCents.isAcceptableOrUnknown(data['to_cents']!, _toCentsMeta));
+    } else if (isInserting) {
+      context.missing(_toCentsMeta);
+    }
+    if (data.containsKey('reason')) {
+      context.handle(_reasonMeta,
+          reason.isAcceptableOrUnknown(data['reason']!, _reasonMeta));
+    } else if (isInserting) {
+      context.missing(_reasonMeta);
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta,
+          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CashFloatChange map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CashFloatChange(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      cashCloseId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}cash_close_id'])!,
+      changedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}changed_at'])!,
+      fromCents: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}from_cents'])!,
+      toCents: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}to_cents'])!,
+      reason: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}reason'])!,
+      userId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}user_id'])!,
+    );
+  }
+
+  @override
+  $CashFloatChangesTable createAlias(String alias) {
+    return $CashFloatChangesTable(attachedDatabase, alias);
+  }
+}
+
+class CashFloatChange extends DataClass implements Insertable<CashFloatChange> {
+  final String id;
+  final String cashCloseId;
+  final DateTime changedAt;
+  final int fromCents;
+  final int toCents;
+  final String reason;
+  final String userId;
+  const CashFloatChange(
+      {required this.id,
+      required this.cashCloseId,
+      required this.changedAt,
+      required this.fromCents,
+      required this.toCents,
+      required this.reason,
+      required this.userId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['cash_close_id'] = Variable<String>(cashCloseId);
+    map['changed_at'] = Variable<DateTime>(changedAt);
+    map['from_cents'] = Variable<int>(fromCents);
+    map['to_cents'] = Variable<int>(toCents);
+    map['reason'] = Variable<String>(reason);
+    map['user_id'] = Variable<String>(userId);
+    return map;
+  }
+
+  CashFloatChangesCompanion toCompanion(bool nullToAbsent) {
+    return CashFloatChangesCompanion(
+      id: Value(id),
+      cashCloseId: Value(cashCloseId),
+      changedAt: Value(changedAt),
+      fromCents: Value(fromCents),
+      toCents: Value(toCents),
+      reason: Value(reason),
+      userId: Value(userId),
+    );
+  }
+
+  factory CashFloatChange.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CashFloatChange(
+      id: serializer.fromJson<String>(json['id']),
+      cashCloseId: serializer.fromJson<String>(json['cashCloseId']),
+      changedAt: serializer.fromJson<DateTime>(json['changedAt']),
+      fromCents: serializer.fromJson<int>(json['fromCents']),
+      toCents: serializer.fromJson<int>(json['toCents']),
+      reason: serializer.fromJson<String>(json['reason']),
+      userId: serializer.fromJson<String>(json['userId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'cashCloseId': serializer.toJson<String>(cashCloseId),
+      'changedAt': serializer.toJson<DateTime>(changedAt),
+      'fromCents': serializer.toJson<int>(fromCents),
+      'toCents': serializer.toJson<int>(toCents),
+      'reason': serializer.toJson<String>(reason),
+      'userId': serializer.toJson<String>(userId),
+    };
+  }
+
+  CashFloatChange copyWith(
+          {String? id,
+          String? cashCloseId,
+          DateTime? changedAt,
+          int? fromCents,
+          int? toCents,
+          String? reason,
+          String? userId}) =>
+      CashFloatChange(
+        id: id ?? this.id,
+        cashCloseId: cashCloseId ?? this.cashCloseId,
+        changedAt: changedAt ?? this.changedAt,
+        fromCents: fromCents ?? this.fromCents,
+        toCents: toCents ?? this.toCents,
+        reason: reason ?? this.reason,
+        userId: userId ?? this.userId,
+      );
+  CashFloatChange copyWithCompanion(CashFloatChangesCompanion data) {
+    return CashFloatChange(
+      id: data.id.present ? data.id.value : this.id,
+      cashCloseId:
+          data.cashCloseId.present ? data.cashCloseId.value : this.cashCloseId,
+      changedAt: data.changedAt.present ? data.changedAt.value : this.changedAt,
+      fromCents: data.fromCents.present ? data.fromCents.value : this.fromCents,
+      toCents: data.toCents.present ? data.toCents.value : this.toCents,
+      reason: data.reason.present ? data.reason.value : this.reason,
+      userId: data.userId.present ? data.userId.value : this.userId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CashFloatChange(')
+          ..write('id: $id, ')
+          ..write('cashCloseId: $cashCloseId, ')
+          ..write('changedAt: $changedAt, ')
+          ..write('fromCents: $fromCents, ')
+          ..write('toCents: $toCents, ')
+          ..write('reason: $reason, ')
+          ..write('userId: $userId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id, cashCloseId, changedAt, fromCents, toCents, reason, userId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CashFloatChange &&
+          other.id == this.id &&
+          other.cashCloseId == this.cashCloseId &&
+          other.changedAt == this.changedAt &&
+          other.fromCents == this.fromCents &&
+          other.toCents == this.toCents &&
+          other.reason == this.reason &&
+          other.userId == this.userId);
+}
+
+class CashFloatChangesCompanion extends UpdateCompanion<CashFloatChange> {
+  final Value<String> id;
+  final Value<String> cashCloseId;
+  final Value<DateTime> changedAt;
+  final Value<int> fromCents;
+  final Value<int> toCents;
+  final Value<String> reason;
+  final Value<String> userId;
+  final Value<int> rowid;
+  const CashFloatChangesCompanion({
+    this.id = const Value.absent(),
+    this.cashCloseId = const Value.absent(),
+    this.changedAt = const Value.absent(),
+    this.fromCents = const Value.absent(),
+    this.toCents = const Value.absent(),
+    this.reason = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CashFloatChangesCompanion.insert({
+    required String id,
+    required String cashCloseId,
+    required DateTime changedAt,
+    required int fromCents,
+    required int toCents,
+    required String reason,
+    required String userId,
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        cashCloseId = Value(cashCloseId),
+        changedAt = Value(changedAt),
+        fromCents = Value(fromCents),
+        toCents = Value(toCents),
+        reason = Value(reason),
+        userId = Value(userId);
+  static Insertable<CashFloatChange> custom({
+    Expression<String>? id,
+    Expression<String>? cashCloseId,
+    Expression<DateTime>? changedAt,
+    Expression<int>? fromCents,
+    Expression<int>? toCents,
+    Expression<String>? reason,
+    Expression<String>? userId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (cashCloseId != null) 'cash_close_id': cashCloseId,
+      if (changedAt != null) 'changed_at': changedAt,
+      if (fromCents != null) 'from_cents': fromCents,
+      if (toCents != null) 'to_cents': toCents,
+      if (reason != null) 'reason': reason,
+      if (userId != null) 'user_id': userId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CashFloatChangesCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? cashCloseId,
+      Value<DateTime>? changedAt,
+      Value<int>? fromCents,
+      Value<int>? toCents,
+      Value<String>? reason,
+      Value<String>? userId,
+      Value<int>? rowid}) {
+    return CashFloatChangesCompanion(
+      id: id ?? this.id,
+      cashCloseId: cashCloseId ?? this.cashCloseId,
+      changedAt: changedAt ?? this.changedAt,
+      fromCents: fromCents ?? this.fromCents,
+      toCents: toCents ?? this.toCents,
+      reason: reason ?? this.reason,
+      userId: userId ?? this.userId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (cashCloseId.present) {
+      map['cash_close_id'] = Variable<String>(cashCloseId.value);
+    }
+    if (changedAt.present) {
+      map['changed_at'] = Variable<DateTime>(changedAt.value);
+    }
+    if (fromCents.present) {
+      map['from_cents'] = Variable<int>(fromCents.value);
+    }
+    if (toCents.present) {
+      map['to_cents'] = Variable<int>(toCents.value);
+    }
+    if (reason.present) {
+      map['reason'] = Variable<String>(reason.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<String>(userId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CashFloatChangesCompanion(')
+          ..write('id: $id, ')
+          ..write('cashCloseId: $cashCloseId, ')
+          ..write('changedAt: $changedAt, ')
+          ..write('fromCents: $fromCents, ')
+          ..write('toCents: $toCents, ')
+          ..write('reason: $reason, ')
+          ..write('userId: $userId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -3936,6 +4582,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $SalesTable sales = $SalesTable(this);
   late final $StockMovementsTable stockMovements = $StockMovementsTable(this);
   late final $SaleItemsTable saleItems = $SaleItemsTable(this);
+  late final $CashFloatChangesTable cashFloatChanges =
+      $CashFloatChangesTable(this);
   late final $SettingsTable settings = $SettingsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
@@ -3949,6 +4597,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         sales,
         stockMovements,
         saleItems,
+        cashFloatChanges,
         settings
       ];
 }
@@ -4020,6 +4669,22 @@ final class $$UsersTableReferences
         .filter((f) => f.userId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_stockMovementsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$CashFloatChangesTable, List<CashFloatChange>>
+      _cashFloatChangesRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.cashFloatChanges,
+              aliasName: 'users__id__cash_float_changes__user_id');
+
+  $$CashFloatChangesTableProcessedTableManager get cashFloatChangesRefs {
+    final manager =
+        $$CashFloatChangesTableTableManager($_db, $_db.cashFloatChanges)
+            .filter((f) => f.userId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_cashFloatChangesRefsTable($_db));
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
@@ -4115,6 +4780,27 @@ class $$UsersTableFilterComposer extends Composer<_$AppDatabase, $UsersTable> {
             $$StockMovementsTableFilterComposer(
               $db: $db,
               $table: $db.stockMovements,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> cashFloatChangesRefs(
+      Expression<bool> Function($$CashFloatChangesTableFilterComposer f) f) {
+    final $$CashFloatChangesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.cashFloatChanges,
+        getReferencedColumn: (t) => t.userId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CashFloatChangesTableFilterComposer(
+              $db: $db,
+              $table: $db.cashFloatChanges,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -4259,6 +4945,27 @@ class $$UsersTableAnnotationComposer
             ));
     return f(composer);
   }
+
+  Expression<T> cashFloatChangesRefs<T extends Object>(
+      Expression<T> Function($$CashFloatChangesTableAnnotationComposer a) f) {
+    final $$CashFloatChangesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.cashFloatChanges,
+        getReferencedColumn: (t) => t.userId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CashFloatChangesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.cashFloatChanges,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$UsersTableTableManager extends RootTableManager<
@@ -4273,7 +4980,10 @@ class $$UsersTableTableManager extends RootTableManager<
     (User, $$UsersTableReferences),
     User,
     PrefetchHooks Function(
-        {bool cashClosesRefs, bool salesRefs, bool stockMovementsRefs})> {
+        {bool cashClosesRefs,
+        bool salesRefs,
+        bool stockMovementsRefs,
+        bool cashFloatChangesRefs})> {
   $$UsersTableTableManager(_$AppDatabase db, $UsersTable table)
       : super(TableManagerState(
           db: db,
@@ -4341,13 +5051,15 @@ class $$UsersTableTableManager extends RootTableManager<
           prefetchHooksCallback: (
               {cashClosesRefs = false,
               salesRefs = false,
-              stockMovementsRefs = false}) {
+              stockMovementsRefs = false,
+              cashFloatChangesRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
                 if (cashClosesRefs) db.cashCloses,
                 if (salesRefs) db.sales,
-                if (stockMovementsRefs) db.stockMovements
+                if (stockMovementsRefs) db.stockMovements,
+                if (cashFloatChangesRefs) db.cashFloatChanges
               ],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
@@ -4386,6 +5098,18 @@ class $$UsersTableTableManager extends RootTableManager<
                                 .stockMovementsRefs,
                         currentColumn: 'id',
                         referencedColumn: 'user_id',
+                        typedResults: items),
+                  if (cashFloatChangesRefs)
+                    await $_getPrefetchedDataByColumns<User, $UsersTable,
+                            CashFloatChange, $CashFloatChangesTable>(
+                        currentTable: table,
+                        referencedTable: $$UsersTableReferences
+                            ._cashFloatChangesRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$UsersTableReferences(db, table, p0)
+                                .cashFloatChangesRefs,
+                        currentColumn: 'id',
+                        referencedColumn: 'user_id',
                         typedResults: items)
                 ];
               },
@@ -4406,7 +5130,10 @@ typedef $$UsersTableProcessedTableManager = ProcessedTableManager<
     (User, $$UsersTableReferences),
     User,
     PrefetchHooks Function(
-        {bool cashClosesRefs, bool salesRefs, bool stockMovementsRefs})>;
+        {bool cashClosesRefs,
+        bool salesRefs,
+        bool stockMovementsRefs,
+        bool cashFloatChangesRefs})>;
 typedef $$CategoriesTableCreateCompanionBuilder = CategoriesCompanion Function({
   required String id,
   required String name,
@@ -5185,11 +5912,17 @@ typedef $$CashClosesTableCreateCompanionBuilder = CashClosesCompanion Function({
   required String userId,
   required DateTime openedAt,
   Value<DateTime?> closedAt,
+  Value<String?> closedBy,
   required int openingFloatCents,
+  Value<int> cashSalesCents,
+  Value<int> cardSalesCents,
+  Value<int> transferSalesCents,
+  Value<int> salesCount,
   Value<int?> expectedCashCents,
   Value<int?> countedCashCents,
   Value<int?> differenceCents,
   Value<String?> totalsByMethod,
+  Value<String?> denominationsJson,
   required DateTime createdAt,
   required DateTime updatedAt,
   Value<DateTime?> deletedAt,
@@ -5200,11 +5933,17 @@ typedef $$CashClosesTableUpdateCompanionBuilder = CashClosesCompanion Function({
   Value<String> userId,
   Value<DateTime> openedAt,
   Value<DateTime?> closedAt,
+  Value<String?> closedBy,
   Value<int> openingFloatCents,
+  Value<int> cashSalesCents,
+  Value<int> cardSalesCents,
+  Value<int> transferSalesCents,
+  Value<int> salesCount,
   Value<int?> expectedCashCents,
   Value<int?> countedCashCents,
   Value<int?> differenceCents,
   Value<String?> totalsByMethod,
+  Value<String?> denominationsJson,
   Value<DateTime> createdAt,
   Value<DateTime> updatedAt,
   Value<DateTime?> deletedAt,
@@ -5242,6 +5981,22 @@ final class $$CashClosesTableReferences
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
+
+  static MultiTypedResultKey<$CashFloatChangesTable, List<CashFloatChange>>
+      _cashFloatChangesRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.cashFloatChanges,
+              aliasName: 'cash_closes__id__cash_float_changes__cash_close_id');
+
+  $$CashFloatChangesTableProcessedTableManager get cashFloatChangesRefs {
+    final manager = $$CashFloatChangesTableTableManager(
+            $_db, $_db.cashFloatChanges)
+        .filter((f) => f.cashCloseId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_cashFloatChangesRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
 }
 
 class $$CashClosesTableFilterComposer
@@ -5262,9 +6017,27 @@ class $$CashClosesTableFilterComposer
   ColumnFilters<DateTime> get closedAt => $composableBuilder(
       column: $table.closedAt, builder: (column) => ColumnFilters(column));
 
+  ColumnFilters<String> get closedBy => $composableBuilder(
+      column: $table.closedBy, builder: (column) => ColumnFilters(column));
+
   ColumnFilters<int> get openingFloatCents => $composableBuilder(
       column: $table.openingFloatCents,
       builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get cashSalesCents => $composableBuilder(
+      column: $table.cashSalesCents,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get cardSalesCents => $composableBuilder(
+      column: $table.cardSalesCents,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get transferSalesCents => $composableBuilder(
+      column: $table.transferSalesCents,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get salesCount => $composableBuilder(
+      column: $table.salesCount, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<int> get expectedCashCents => $composableBuilder(
       column: $table.expectedCashCents,
@@ -5280,6 +6053,10 @@ class $$CashClosesTableFilterComposer
 
   ColumnFilters<String> get totalsByMethod => $composableBuilder(
       column: $table.totalsByMethod,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get denominationsJson => $composableBuilder(
+      column: $table.denominationsJson,
       builder: (column) => ColumnFilters(column));
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
@@ -5331,6 +6108,27 @@ class $$CashClosesTableFilterComposer
             ));
     return f(composer);
   }
+
+  Expression<bool> cashFloatChangesRefs(
+      Expression<bool> Function($$CashFloatChangesTableFilterComposer f) f) {
+    final $$CashFloatChangesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.cashFloatChanges,
+        getReferencedColumn: (t) => t.cashCloseId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CashFloatChangesTableFilterComposer(
+              $db: $db,
+              $table: $db.cashFloatChanges,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$CashClosesTableOrderingComposer
@@ -5351,9 +6149,27 @@ class $$CashClosesTableOrderingComposer
   ColumnOrderings<DateTime> get closedAt => $composableBuilder(
       column: $table.closedAt, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get closedBy => $composableBuilder(
+      column: $table.closedBy, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<int> get openingFloatCents => $composableBuilder(
       column: $table.openingFloatCents,
       builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get cashSalesCents => $composableBuilder(
+      column: $table.cashSalesCents,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get cardSalesCents => $composableBuilder(
+      column: $table.cardSalesCents,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get transferSalesCents => $composableBuilder(
+      column: $table.transferSalesCents,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get salesCount => $composableBuilder(
+      column: $table.salesCount, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<int> get expectedCashCents => $composableBuilder(
       column: $table.expectedCashCents,
@@ -5369,6 +6185,10 @@ class $$CashClosesTableOrderingComposer
 
   ColumnOrderings<String> get totalsByMethod => $composableBuilder(
       column: $table.totalsByMethod,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get denominationsJson => $composableBuilder(
+      column: $table.denominationsJson,
       builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
@@ -5419,8 +6239,23 @@ class $$CashClosesTableAnnotationComposer
   GeneratedColumn<DateTime> get closedAt =>
       $composableBuilder(column: $table.closedAt, builder: (column) => column);
 
+  GeneratedColumn<String> get closedBy =>
+      $composableBuilder(column: $table.closedBy, builder: (column) => column);
+
   GeneratedColumn<int> get openingFloatCents => $composableBuilder(
       column: $table.openingFloatCents, builder: (column) => column);
+
+  GeneratedColumn<int> get cashSalesCents => $composableBuilder(
+      column: $table.cashSalesCents, builder: (column) => column);
+
+  GeneratedColumn<int> get cardSalesCents => $composableBuilder(
+      column: $table.cardSalesCents, builder: (column) => column);
+
+  GeneratedColumn<int> get transferSalesCents => $composableBuilder(
+      column: $table.transferSalesCents, builder: (column) => column);
+
+  GeneratedColumn<int> get salesCount => $composableBuilder(
+      column: $table.salesCount, builder: (column) => column);
 
   GeneratedColumn<int> get expectedCashCents => $composableBuilder(
       column: $table.expectedCashCents, builder: (column) => column);
@@ -5433,6 +6268,9 @@ class $$CashClosesTableAnnotationComposer
 
   GeneratedColumn<String> get totalsByMethod => $composableBuilder(
       column: $table.totalsByMethod, builder: (column) => column);
+
+  GeneratedColumn<String> get denominationsJson => $composableBuilder(
+      column: $table.denominationsJson, builder: (column) => column);
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -5483,6 +6321,27 @@ class $$CashClosesTableAnnotationComposer
             ));
     return f(composer);
   }
+
+  Expression<T> cashFloatChangesRefs<T extends Object>(
+      Expression<T> Function($$CashFloatChangesTableAnnotationComposer a) f) {
+    final $$CashFloatChangesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.cashFloatChanges,
+        getReferencedColumn: (t) => t.cashCloseId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CashFloatChangesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.cashFloatChanges,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$CashClosesTableTableManager extends RootTableManager<
@@ -5496,7 +6355,8 @@ class $$CashClosesTableTableManager extends RootTableManager<
     $$CashClosesTableUpdateCompanionBuilder,
     (CashClose, $$CashClosesTableReferences),
     CashClose,
-    PrefetchHooks Function({bool userId, bool salesRefs})> {
+    PrefetchHooks Function(
+        {bool userId, bool salesRefs, bool cashFloatChangesRefs})> {
   $$CashClosesTableTableManager(_$AppDatabase db, $CashClosesTable table)
       : super(TableManagerState(
           db: db,
@@ -5512,11 +6372,17 @@ class $$CashClosesTableTableManager extends RootTableManager<
             Value<String> userId = const Value.absent(),
             Value<DateTime> openedAt = const Value.absent(),
             Value<DateTime?> closedAt = const Value.absent(),
+            Value<String?> closedBy = const Value.absent(),
             Value<int> openingFloatCents = const Value.absent(),
+            Value<int> cashSalesCents = const Value.absent(),
+            Value<int> cardSalesCents = const Value.absent(),
+            Value<int> transferSalesCents = const Value.absent(),
+            Value<int> salesCount = const Value.absent(),
             Value<int?> expectedCashCents = const Value.absent(),
             Value<int?> countedCashCents = const Value.absent(),
             Value<int?> differenceCents = const Value.absent(),
             Value<String?> totalsByMethod = const Value.absent(),
+            Value<String?> denominationsJson = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime> updatedAt = const Value.absent(),
             Value<DateTime?> deletedAt = const Value.absent(),
@@ -5527,11 +6393,17 @@ class $$CashClosesTableTableManager extends RootTableManager<
             userId: userId,
             openedAt: openedAt,
             closedAt: closedAt,
+            closedBy: closedBy,
             openingFloatCents: openingFloatCents,
+            cashSalesCents: cashSalesCents,
+            cardSalesCents: cardSalesCents,
+            transferSalesCents: transferSalesCents,
+            salesCount: salesCount,
             expectedCashCents: expectedCashCents,
             countedCashCents: countedCashCents,
             differenceCents: differenceCents,
             totalsByMethod: totalsByMethod,
+            denominationsJson: denominationsJson,
             createdAt: createdAt,
             updatedAt: updatedAt,
             deletedAt: deletedAt,
@@ -5542,11 +6414,17 @@ class $$CashClosesTableTableManager extends RootTableManager<
             required String userId,
             required DateTime openedAt,
             Value<DateTime?> closedAt = const Value.absent(),
+            Value<String?> closedBy = const Value.absent(),
             required int openingFloatCents,
+            Value<int> cashSalesCents = const Value.absent(),
+            Value<int> cardSalesCents = const Value.absent(),
+            Value<int> transferSalesCents = const Value.absent(),
+            Value<int> salesCount = const Value.absent(),
             Value<int?> expectedCashCents = const Value.absent(),
             Value<int?> countedCashCents = const Value.absent(),
             Value<int?> differenceCents = const Value.absent(),
             Value<String?> totalsByMethod = const Value.absent(),
+            Value<String?> denominationsJson = const Value.absent(),
             required DateTime createdAt,
             required DateTime updatedAt,
             Value<DateTime?> deletedAt = const Value.absent(),
@@ -5557,11 +6435,17 @@ class $$CashClosesTableTableManager extends RootTableManager<
             userId: userId,
             openedAt: openedAt,
             closedAt: closedAt,
+            closedBy: closedBy,
             openingFloatCents: openingFloatCents,
+            cashSalesCents: cashSalesCents,
+            cardSalesCents: cardSalesCents,
+            transferSalesCents: transferSalesCents,
+            salesCount: salesCount,
             expectedCashCents: expectedCashCents,
             countedCashCents: countedCashCents,
             differenceCents: differenceCents,
             totalsByMethod: totalsByMethod,
+            denominationsJson: denominationsJson,
             createdAt: createdAt,
             updatedAt: updatedAt,
             deletedAt: deletedAt,
@@ -5573,10 +6457,16 @@ class $$CashClosesTableTableManager extends RootTableManager<
                     $$CashClosesTableReferences(db, table, e)
                   ))
               .toList(),
-          prefetchHooksCallback: ({userId = false, salesRefs = false}) {
+          prefetchHooksCallback: (
+              {userId = false,
+              salesRefs = false,
+              cashFloatChangesRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [if (salesRefs) db.sales],
+              explicitlyWatchedTables: [
+                if (salesRefs) db.sales,
+                if (cashFloatChangesRefs) db.cashFloatChanges
+              ],
               addJoins: <
                   T extends TableManagerState<
                       dynamic,
@@ -5616,6 +6506,21 @@ class $$CashClosesTableTableManager extends RootTableManager<
                                 .salesRefs,
                         currentColumn: 'id',
                         referencedColumn: 'cash_close_id',
+                        typedResults: items),
+                  if (cashFloatChangesRefs)
+                    await $_getPrefetchedDataByColumns<
+                            CashClose,
+                            $CashClosesTable,
+                            CashFloatChange,
+                            $CashFloatChangesTable>(
+                        currentTable: table,
+                        referencedTable: $$CashClosesTableReferences
+                            ._cashFloatChangesRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$CashClosesTableReferences(db, table, p0)
+                                .cashFloatChangesRefs,
+                        currentColumn: 'id',
+                        referencedColumn: 'cash_close_id',
                         typedResults: items)
                 ];
               },
@@ -5635,7 +6540,8 @@ typedef $$CashClosesTableProcessedTableManager = ProcessedTableManager<
     $$CashClosesTableUpdateCompanionBuilder,
     (CashClose, $$CashClosesTableReferences),
     CashClose,
-    PrefetchHooks Function({bool userId, bool salesRefs})>;
+    PrefetchHooks Function(
+        {bool userId, bool salesRefs, bool cashFloatChangesRefs})>;
 typedef $$SalesTableCreateCompanionBuilder = SalesCompanion Function({
   required String id,
   required String status,
@@ -7167,6 +8073,388 @@ typedef $$SaleItemsTableProcessedTableManager = ProcessedTableManager<
     (SaleItem, $$SaleItemsTableReferences),
     SaleItem,
     PrefetchHooks Function({bool saleId, bool productId})>;
+typedef $$CashFloatChangesTableCreateCompanionBuilder
+    = CashFloatChangesCompanion Function({
+  required String id,
+  required String cashCloseId,
+  required DateTime changedAt,
+  required int fromCents,
+  required int toCents,
+  required String reason,
+  required String userId,
+  Value<int> rowid,
+});
+typedef $$CashFloatChangesTableUpdateCompanionBuilder
+    = CashFloatChangesCompanion Function({
+  Value<String> id,
+  Value<String> cashCloseId,
+  Value<DateTime> changedAt,
+  Value<int> fromCents,
+  Value<int> toCents,
+  Value<String> reason,
+  Value<String> userId,
+  Value<int> rowid,
+});
+
+final class $$CashFloatChangesTableReferences extends BaseReferences<
+    _$AppDatabase, $CashFloatChangesTable, CashFloatChange> {
+  $$CashFloatChangesTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $CashClosesTable _cashCloseIdTable(_$AppDatabase db) => db.cashCloses
+      .createAlias('cash_float_changes__cash_close_id__cash_closes__id');
+
+  $$CashClosesTableProcessedTableManager get cashCloseId {
+    final $_column = $_itemColumn<String>('cash_close_id')!;
+
+    final manager = $$CashClosesTableTableManager($_db, $_db.cashCloses)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_cashCloseIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $UsersTable _userIdTable(_$AppDatabase db) =>
+      db.users.createAlias('cash_float_changes__user_id__users__id');
+
+  $$UsersTableProcessedTableManager get userId {
+    final $_column = $_itemColumn<String>('user_id')!;
+
+    final manager = $$UsersTableTableManager($_db, $_db.users)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_userIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$CashFloatChangesTableFilterComposer
+    extends Composer<_$AppDatabase, $CashFloatChangesTable> {
+  $$CashFloatChangesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get changedAt => $composableBuilder(
+      column: $table.changedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get fromCents => $composableBuilder(
+      column: $table.fromCents, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get toCents => $composableBuilder(
+      column: $table.toCents, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get reason => $composableBuilder(
+      column: $table.reason, builder: (column) => ColumnFilters(column));
+
+  $$CashClosesTableFilterComposer get cashCloseId {
+    final $$CashClosesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.cashCloseId,
+        referencedTable: $db.cashCloses,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CashClosesTableFilterComposer(
+              $db: $db,
+              $table: $db.cashCloses,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$UsersTableFilterComposer get userId {
+    final $$UsersTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.userId,
+        referencedTable: $db.users,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$UsersTableFilterComposer(
+              $db: $db,
+              $table: $db.users,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$CashFloatChangesTableOrderingComposer
+    extends Composer<_$AppDatabase, $CashFloatChangesTable> {
+  $$CashFloatChangesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get changedAt => $composableBuilder(
+      column: $table.changedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get fromCents => $composableBuilder(
+      column: $table.fromCents, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get toCents => $composableBuilder(
+      column: $table.toCents, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get reason => $composableBuilder(
+      column: $table.reason, builder: (column) => ColumnOrderings(column));
+
+  $$CashClosesTableOrderingComposer get cashCloseId {
+    final $$CashClosesTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.cashCloseId,
+        referencedTable: $db.cashCloses,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CashClosesTableOrderingComposer(
+              $db: $db,
+              $table: $db.cashCloses,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$UsersTableOrderingComposer get userId {
+    final $$UsersTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.userId,
+        referencedTable: $db.users,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$UsersTableOrderingComposer(
+              $db: $db,
+              $table: $db.users,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$CashFloatChangesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CashFloatChangesTable> {
+  $$CashFloatChangesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get changedAt =>
+      $composableBuilder(column: $table.changedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get fromCents =>
+      $composableBuilder(column: $table.fromCents, builder: (column) => column);
+
+  GeneratedColumn<int> get toCents =>
+      $composableBuilder(column: $table.toCents, builder: (column) => column);
+
+  GeneratedColumn<String> get reason =>
+      $composableBuilder(column: $table.reason, builder: (column) => column);
+
+  $$CashClosesTableAnnotationComposer get cashCloseId {
+    final $$CashClosesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.cashCloseId,
+        referencedTable: $db.cashCloses,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CashClosesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.cashCloses,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$UsersTableAnnotationComposer get userId {
+    final $$UsersTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.userId,
+        referencedTable: $db.users,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$UsersTableAnnotationComposer(
+              $db: $db,
+              $table: $db.users,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$CashFloatChangesTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $CashFloatChangesTable,
+    CashFloatChange,
+    $$CashFloatChangesTableFilterComposer,
+    $$CashFloatChangesTableOrderingComposer,
+    $$CashFloatChangesTableAnnotationComposer,
+    $$CashFloatChangesTableCreateCompanionBuilder,
+    $$CashFloatChangesTableUpdateCompanionBuilder,
+    (CashFloatChange, $$CashFloatChangesTableReferences),
+    CashFloatChange,
+    PrefetchHooks Function({bool cashCloseId, bool userId})> {
+  $$CashFloatChangesTableTableManager(
+      _$AppDatabase db, $CashFloatChangesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CashFloatChangesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CashFloatChangesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CashFloatChangesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> cashCloseId = const Value.absent(),
+            Value<DateTime> changedAt = const Value.absent(),
+            Value<int> fromCents = const Value.absent(),
+            Value<int> toCents = const Value.absent(),
+            Value<String> reason = const Value.absent(),
+            Value<String> userId = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              CashFloatChangesCompanion(
+            id: id,
+            cashCloseId: cashCloseId,
+            changedAt: changedAt,
+            fromCents: fromCents,
+            toCents: toCents,
+            reason: reason,
+            userId: userId,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String cashCloseId,
+            required DateTime changedAt,
+            required int fromCents,
+            required int toCents,
+            required String reason,
+            required String userId,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              CashFloatChangesCompanion.insert(
+            id: id,
+            cashCloseId: cashCloseId,
+            changedAt: changedAt,
+            fromCents: fromCents,
+            toCents: toCents,
+            reason: reason,
+            userId: userId,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$CashFloatChangesTable, CashFloatChange>(table),
+                    $$CashFloatChangesTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({cashCloseId = false, userId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (cashCloseId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.cashCloseId,
+                    referencedTable:
+                        $$CashFloatChangesTableReferences._cashCloseIdTable(db),
+                    referencedColumn: $$CashFloatChangesTableReferences
+                        ._cashCloseIdTable(db)
+                        .id,
+                  ) as T;
+                }
+                if (userId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.userId,
+                    referencedTable:
+                        $$CashFloatChangesTableReferences._userIdTable(db),
+                    referencedColumn:
+                        $$CashFloatChangesTableReferences._userIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$CashFloatChangesTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $CashFloatChangesTable,
+    CashFloatChange,
+    $$CashFloatChangesTableFilterComposer,
+    $$CashFloatChangesTableOrderingComposer,
+    $$CashFloatChangesTableAnnotationComposer,
+    $$CashFloatChangesTableCreateCompanionBuilder,
+    $$CashFloatChangesTableUpdateCompanionBuilder,
+    (CashFloatChange, $$CashFloatChangesTableReferences),
+    CashFloatChange,
+    PrefetchHooks Function({bool cashCloseId, bool userId})>;
 typedef $$SettingsTableCreateCompanionBuilder = SettingsCompanion Function({
   required String key,
   required String value,
@@ -7339,6 +8627,8 @@ class $AppDatabaseManager {
       $$StockMovementsTableTableManager(_db, _db.stockMovements);
   $$SaleItemsTableTableManager get saleItems =>
       $$SaleItemsTableTableManager(_db, _db.saleItems);
+  $$CashFloatChangesTableTableManager get cashFloatChanges =>
+      $$CashFloatChangesTableTableManager(_db, _db.cashFloatChanges);
   $$SettingsTableTableManager get settings =>
       $$SettingsTableTableManager(_db, _db.settings);
 }

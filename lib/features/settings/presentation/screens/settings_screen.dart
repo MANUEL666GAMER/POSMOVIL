@@ -32,6 +32,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     _loadSettings();
   }
 
+  @override
+  void dispose() {
+    _businessController.dispose();
+    super.dispose();
+  }
+
   Future<void> _loadSettings() async {
     final repo = ref.read(settingsRepositoryProvider);
     final name = await repo.getSetting('business_name') ?? '';
@@ -73,7 +79,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 AppTextField(label: 'Nombre', controller: nameCtrl, prefixIcon: Icons.person),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<AppRole>(
-                  value: selectedRole,
+                  initialValue: selectedRole,
                   decoration: const InputDecoration(labelText: 'Rol', border: OutlineInputBorder()),
                   items: const [
                     DropdownMenuItem(value: AppRole.cashier, child: Text('Cajero')),
@@ -180,12 +186,24 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         padding: const EdgeInsets.all(24),
         children: [
           const Text('Datos del Negocio', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(child: AppTextField(label: 'Nombre de la tienda', controller: _businessController)),
+              Expanded(
+                child: AppTextField(
+                  label: 'Nombre de la tienda',
+                  controller: _businessController,
+                ),
+              ),
               const SizedBox(width: 12),
-              AppButton(label: 'Guardar', expand: false, onPressed: _saveBusinessName),
+              SizedBox(
+                width: 140,
+                child: AppButton(
+                  label: 'Guardar',
+                  onPressed: _saveBusinessName,
+                ),
+              ),
             ],
           ),
 
@@ -199,20 +217,24 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             spacing: 12,
             runSpacing: 12,
             children: [
-              AppButton(
-                label: 'Respaldar ahora',
-                icon: Icons.cloud_upload,
-                expand: false,
-                isLoading: _isBackingUp,
-                onPressed: _runBackup,
+              SizedBox(
+                width: 200,
+                child: AppButton(
+                  label: 'Respaldar ahora',
+                  icon: Icons.cloud_upload,
+                  isLoading: _isBackingUp,
+                  onPressed: _runBackup,
+                ),
               ),
-              AppButton(
-                label: 'Restaurar copia',
-                icon: Icons.cloud_download,
-                variant: AppButtonVariant.outline,
-                expand: false,
-                isLoading: _isBackingUp,
-                onPressed: _runRestore,
+              SizedBox(
+                width: 200,
+                child: AppButton(
+                  label: 'Restaurar copia',
+                  icon: Icons.cloud_download,
+                  variant: AppButtonVariant.outline,
+                  isLoading: _isBackingUp,
+                  onPressed: _runRestore,
+                ),
               ),
             ],
           ),
@@ -222,12 +244,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Usuarios y Cajeros', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              AppButton(
-                label: 'Agregar Usuario',
-                icon: Icons.person_add,
-                expand: false,
-                onPressed: _showCreateUserDialog,
+              const Expanded(
+                child: Text(
+                  'Usuarios y Cajeros',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                width: 190,
+                child: AppButton(
+                  label: 'Agregar Usuario',
+                  icon: Icons.person_add,
+                  onPressed: _showCreateUserDialog,
+                ),
               ),
             ],
           ),
