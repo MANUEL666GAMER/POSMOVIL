@@ -8,6 +8,8 @@ import '../../../products/presentation/providers/products_provider.dart';
 import '../providers/sales_provider.dart';
 import '../widgets/weight_input_sheet.dart';
 import '../widgets/checkout_dialog.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
+import '../../data/sales_repository.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -22,8 +24,7 @@ class HomeScreen extends ConsumerWidget {
       ref.read(salesProvider.notifier).addProduct(product);
     }
   }
-
-  Future<void> _processCheckout(BuildContext context, WidgetRef ref) async {
+Future<void> _processCheckout(BuildContext context, WidgetRef ref) async {
     final activeCart = ref.read(salesProvider).activeCart;
     if (activeCart.items.isEmpty) return;
 
@@ -34,12 +35,42 @@ class HomeScreen extends ConsumerWidget {
     );
 
     if (success == true) {
-      // TODO (Fase 2): Guardar el Ticket en la base de datos usando el Repositorio de Ventas
-      ref.read(salesProvider.notifier).clearActiveCart();
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Venta completada con éxito')));
+      final currentUser = ref.read(authStateProvider);
+      
+      if (currentUser == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error: No hay sesión activa')),
+        );
+        return;
+      }
+
+      try {
+        // 1. Guardar la venta y descontar stock en BD
+        await ref.read(salesRepositoryProvider).saveSale(activeCart, currentUser);
+
+        // 2. Limpiar el carrito
+        ref.read(salesProvider.notifier).clearActiveCart();
+        
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Venta cobrada correctamente'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      } catch (e) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error al guardar: $e'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
     }
   }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final salesState = ref.watch(salesProvider);
