@@ -5,6 +5,8 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/products/presentation/screens/products_screen.dart';
 import '../../features/sales/presentation/screens/home_screen.dart';
+import '../../features/inventory/presentation/screens/inventory_screen.dart';
+import '../../features/cash_close/presentation/screens/cash_close_screen.dart';
 
 final goRouter = GoRouter(
   initialLocation: '/',
@@ -28,6 +30,10 @@ final goRouter = GoRouter(
     GoRoute(
       path: '/home',
       builder: (context, state) => const HomeScreen(),
+    ),
+    GoRoute(
+      path: '/cash-close',
+      builder: (context, state) => const CashCloseScreen(),
     ),
     
   ],
