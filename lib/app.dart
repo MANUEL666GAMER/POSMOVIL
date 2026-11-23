@@ -9,7 +9,7 @@ class PosApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // Más adelante conectaremos esto con un provider para alternar el tema (settings)
     return MaterialApp.router(
-      title: 'POS Fácil',
+      title: 'POS MOVIL',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
