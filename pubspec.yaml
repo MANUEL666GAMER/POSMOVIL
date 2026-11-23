@@ -1,0 +1,43 @@
+name: pos_movil
+description: App de punto de venta para pequeños negocios.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Estado y Navegación
+  flutter_riverpod: ^2.4.9
+  go_router: ^12.1.1
+  
+  # Base de datos (Drift / SQLite)
+  drift: ^2.14.0
+  sqlite3_flutter_libs: ^0.5.18
+  path_provider: ^2.1.1
+  path: ^1.8.3
+  
+  # Utilidades
+  intl: ^0.18.1
+  uuid: ^4.2.1
+  crypto: ^3.0.3
+  
+  # Hardware y exportación (comentados hasta implementarse en siguientes fases para evitar errores de compilación prematuros)
+  mobile_scanner: ^7.5.0
+  flutter_secure_storage: ^9.0.0
+  excel: ^4.0.6
+  share_plus: ^7.2.1
+  google_sign_in: ^6.1.6
+  googleapis: ^11.0.1
+  gal: ^2.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: ^2.4.7
+  drift_dev: ^2.14.0
+
+flutter:
+  uses-material-design: true
