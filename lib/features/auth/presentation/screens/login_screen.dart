@@ -7,7 +7,7 @@ import '../../../../shared/widgets/user_avatar_tile.dart';
 import '../../../../shared/widgets/state_views.dart';
 import '../../data/auth_repository.dart';
 import '../providers/auth_provider.dart';
-// import 'package:go_router/go_router.dart'; // Para el siguiente paso
+import 'package:go_router/go_router.dart'; // Para el siguiente paso
 
 final usersListProvider = FutureProvider<List<User>>((ref) {
   final repo = ref.read(authRepositoryProvider);
@@ -37,7 +37,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (validUser != null) {
       // Iniciar sesión exitosamente
       ref.read(authStateProvider.notifier).state = validUser;
-      // context.go('/home'); // TODO: Navegar a pantalla principal (próximo paso)
+      context.go('/products');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Bienvenido, ${validUser.name}')),
       );
