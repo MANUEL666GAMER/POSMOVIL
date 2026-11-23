@@ -8,6 +8,7 @@ import '../../features/sales/presentation/screens/home_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_screen.dart';
 import '../../features/cash_close/presentation/screens/cash_close_screen.dart';
 import '../../features/reports/presentation/screens/reports_screen.dart';
+import '../../features/settings/presentation/screens/settings_screen.dart';
 
 final goRouter = GoRouter(
   initialLocation: '/',
@@ -43,6 +44,10 @@ final goRouter = GoRouter(
     GoRoute(
   path: '/reports',
   builder: (context, state) => const ReportsScreen(),
+),
+GoRoute(
+  path: '/settings',
+  builder: (context, state) => const SettingsScreen(),
 ),
     
   ],
