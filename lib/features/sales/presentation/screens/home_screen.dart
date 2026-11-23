@@ -11,6 +11,7 @@ import '../widgets/checkout_dialog.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../data/sales_repository.dart';
 
+
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -86,11 +87,13 @@ Future<void> _processCheckout(BuildContext context, WidgetRef ref) async {
             tooltip: 'Catálogo de Productos',
             onPressed: () => context.push('/products'),
           ),
+          IconButton(icon: Icon(Icons.warehouse), onPressed: () => context.push('/inventory')),
           IconButton(
             icon: const Icon(Icons.logout),
             tooltip: 'Cerrar Sesión',
             onPressed: () => context.go('/login'),
           ),
+        
         ],
       ),
       body: Row(
