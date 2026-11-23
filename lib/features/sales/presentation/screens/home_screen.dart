@@ -10,6 +10,7 @@ import '../widgets/weight_input_sheet.dart';
 import '../widgets/checkout_dialog.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../data/sales_repository.dart';
+import '../../../cash_close/presentation/providers/cash_close_provider.dart';
 
 
 class HomeScreen extends ConsumerWidget {
@@ -26,6 +27,16 @@ class HomeScreen extends ConsumerWidget {
     }
   }
 Future<void> _processCheckout(BuildContext context, WidgetRef ref) async {
+  // 1. Verificamos si la caja está abierta primero
+    final activeShift = await ref.read(activeShiftProvider.future);
+    if (activeShift == null) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Debes abrir tu turno en "Caja" antes de poder cobrar'), backgroundColor: Colors.orange),
+        );
+      }
+      return;
+    }
     final activeCart = ref.read(salesProvider).activeCart;
     if (activeCart.items.isEmpty) return;
 
@@ -82,6 +93,7 @@ Future<void> _processCheckout(BuildContext context, WidgetRef ref) async {
       appBar: AppBar(
         title: const Text('Caja'),
         actions: [
+          IconButton(icon: Icon(Icons.point_of_sale), onPressed: () => context.push('/cash-close')),
           IconButton(
             icon: const Icon(Icons.inventory),
             tooltip: 'Catálogo de Productos',

@@ -6,6 +6,7 @@ import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/products/presentation/screens/products_screen.dart';
 import '../../features/sales/presentation/screens/home_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_screen.dart';
+import '../../features/cash_close/presentation/screens/cash_close_screen.dart';
 
 final goRouter = GoRouter(
   initialLocation: '/',
@@ -31,8 +32,8 @@ final goRouter = GoRouter(
       builder: (context, state) => const HomeScreen(),
     ),
     GoRoute(
-      path: '/inventory',
-      builder: (context, state) => const InventoryScreen(),
+      path: '/cash-close',
+      builder: (context, state) => const CashCloseScreen(),
     ),
     
   ],
