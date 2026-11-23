@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 // En los próximos pasos crearemos esta pantalla
-// import '../../shared/widgets/widget_gallery_screen.dart';
+import '../../shared/widgets/widget_gallery_screen.dart';
 
 final goRouter = GoRouter(
   initialLocation: '/',
